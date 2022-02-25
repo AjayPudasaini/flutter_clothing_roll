@@ -1,5 +1,9 @@
-import 'package:clothing_roll/ui/screens/auth/login.dart';
+import 'package:clothing_roll/shred_preferences/shred_preferences_services.dart';
+import 'package:clothing_roll/ui/widget/profile/login_widget.dart';
+import 'package:clothing_roll/ui/widget/profile/profiles_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
+
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({ Key? key }) : super(key: key);
@@ -9,39 +13,28 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreen extends State<ProfileScreen> {
+
+  final PrefServices _prefServices = PrefServices();
+
+
+  Widget pages(){
+    _prefServices.readCache("username", "password").then((value) {
+    if (value != null) {
+        return ProfileWidget();
+      }
+      else{
+        return LoginWidget();
+       }
+     });
+    //  return LoginWidget();
+  }
+
   @override
   Widget build(BuildContext context) {
     return 
     Container(
-      child: Center(
-        child: Column(
-          children: [
-            Image(image: NetworkImage("https://media.giphy.com/media/2ikwIgNrmPZICNmRyX/giphy.gif")),
-            Container(
-              margin: EdgeInsets.symmetric(horizontal: 10.0),
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: ElevatedButton.icon(
-                  
-                  onPressed: () {
-                    Navigator.of(context)
-                    .push(MaterialPageRoute(
-                      builder: (context)=> loginPage()
-                      ));
-                  },
-                  
-                  label: Text('Login'), 
-                  icon: Icon( 
-                    Icons.login,
-                    size: 24.0,
-                  ),
-                  
-                ),
-              ),
-            ),
-          ],
-        ),
-      )
+      child: pages()
+    
     );
   
   }

@@ -1,5 +1,10 @@
+import 'package:clothing_roll/http/httpUser.dart';
+import 'package:clothing_roll/model/userModel.dart';
+import 'package:clothing_roll/ui/screens/auth/login.dart';
 import 'package:flutter/material.dart';
 import 'package:form_field_validator/form_field_validator.dart';
+import 'package:motion_toast/motion_toast.dart';
+
 
 class registerPage extends StatefulWidget {
   const registerPage({ Key? key }) : super(key: key);
@@ -10,12 +15,20 @@ class registerPage extends StatefulWidget {
 
 class _registerPage extends State<registerPage> {
 
-  String username = "";
-  String password = "";
+  // String username = "";
+  // String email = "";
+  // String password = "";
+
+  TextEditingController _usernameControler = TextEditingController();
+  TextEditingController _emailControler = TextEditingController();
+  TextEditingController _passwordControler = TextEditingController();
 
   final _formKey = GlobalKey<FormState>();
-  final usernameController = TextEditingController();
-  final passwordController = TextEditingController();
+
+  Future<bool> registerUserForm(User u) {
+      var res = HttpConnectUser().registerUser(u);
+      return res;
+    }
 
   @override
   Widget build(BuildContext context) {
@@ -83,6 +96,10 @@ class _registerPage extends State<registerPage> {
                           Padding(
                             padding: const EdgeInsets.all(8.0),
                             child: TextFormField(
+                              // onSaved: (val) => {
+                              //   username:val
+                              // },
+                              controller: _usernameControler,
                               decoration: const InputDecoration(
                                 border: OutlineInputBorder(),
                                 labelText: 'Username',
@@ -100,6 +117,10 @@ class _registerPage extends State<registerPage> {
                           Padding(
                             padding: const EdgeInsets.all(8.0),
                             child: TextFormField(
+                              // onSaved: (val)=>{
+                              //   email:val
+                              // },
+                              controller: _emailControler,
                               decoration: const InputDecoration(
                                 border: OutlineInputBorder(),
                                 labelText: 'Email',
@@ -115,6 +136,10 @@ class _registerPage extends State<registerPage> {
                           Padding(
                             padding: const EdgeInsets.all(8.0),
                             child: TextFormField(
+                              // onSaved: (val)=>{
+                              //   password:val
+                              // },
+                              controller: _passwordControler,
                               obscureText: true,
                               decoration: const InputDecoration(
                                 border: OutlineInputBorder(),
@@ -134,13 +159,30 @@ class _registerPage extends State<registerPage> {
                             padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
                             child: ElevatedButton(
                               child: const Text('Register', style: TextStyle(fontSize: 20),),
-                              onPressed: () {
+                              onPressed: () async {
                                 FocusManager.instance.primaryFocus?.unfocus();
                                 if (_formKey.currentState!.validate()) {
-                                  setState(() {
-                                    username = usernameController.text;
-                                    password = passwordController.text;
-                                  });
+                                  _formKey.currentState!.save();
+
+                                  User u =  User(
+                                    username: _usernameControler.text,
+                                    email: _emailControler.text,
+                                    password: _passwordControler.text
+                                  );
+                                  print(u);
+
+
+                                  bool isCreated = await registerUserForm(u); 
+                                  if (isCreated) {
+                                    Navigator.of(context)
+                                      .push(MaterialPageRoute(
+                                      builder: (context)=>loginPage()
+                                    ));
+                                    MotionToast.success(description: Text("Your account has been created")).show(context);
+                                  } else {
+                                    MotionToast.error(description: Text('Failed to create user'))
+                                        .show(context);
+                                  }
                                 }
                                 else{
                                   print("validation error");

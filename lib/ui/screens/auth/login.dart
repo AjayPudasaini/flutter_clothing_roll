@@ -1,5 +1,9 @@
+import 'package:clothing_roll/http/httpUser.dart';
+import 'package:clothing_roll/shred_preferences/shred_preferences_services.dart';
 import 'package:clothing_roll/ui/screens/auth/register.dart';
 import 'package:flutter/material.dart';
+import 'package:motion_toast/motion_toast.dart';
+import 'package:logger/logger.dart';
 
 class loginPage extends StatefulWidget {
   const loginPage({ Key? key }) : super(key: key);
@@ -9,12 +13,22 @@ class loginPage extends StatefulWidget {
 }
 
 class _loginPage extends State<loginPage> {
-  String username = "";
-  String password = "";
+
+  final PrefServices _prefServices = PrefServices();
+
+  TextEditingController _usernameControler = TextEditingController();
+  TextEditingController _passwordControler = TextEditingController();
+
+  var log = Logger();
 
   final _formKey = GlobalKey<FormState>();
-  final usernameController = TextEditingController();
-  final passwordController = TextEditingController();
+
+  Future<bool> loginPost(String uname, String pass) {
+    var res = HttpConnectUser().loginUser(uname, pass);
+    return res;
+  }
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -82,6 +96,7 @@ class _loginPage extends State<loginPage> {
                           Padding(
                             padding: const EdgeInsets.all(8.0),
                             child: TextFormField(
+                              controller: _usernameControler,
                               decoration: const InputDecoration(
                                 border: OutlineInputBorder(),
                                 labelText: 'Username',
@@ -100,6 +115,7 @@ class _loginPage extends State<loginPage> {
                           Padding(
                             padding: const EdgeInsets.all(8.0),
                             child: TextFormField(
+                              controller: _passwordControler,
                               obscureText: true,
                               decoration: const InputDecoration(
                                 border: OutlineInputBorder(),
@@ -123,13 +139,33 @@ class _loginPage extends State<loginPage> {
                             padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
                             child: ElevatedButton(
                               child: const Text('Login', style: TextStyle(fontSize: 20),),
-                              onPressed: () {
+                              onPressed: () async {
                                 FocusManager.instance.primaryFocus?.unfocus();
                                 if (_formKey.currentState!.validate()) {
-                                  setState(() {
-                                    username = usernameController.text;
-                                    password = passwordController.text;
-                                  });
+                                  _formKey.currentState!.save();
+                                  
+                                  var res = await loginPost(_usernameControler.text, _passwordControler.text);
+                                   if (res) {
+                                      _prefServices.createCache(_usernameControler.text, _passwordControler.text).whenComplete(() {
+                                        Navigator.of(context)
+                                        .pop();
+                                        MotionToast.success(
+                                          description: Text('Login Successfull') ,
+                                          toastDuration: const Duration(seconds: 1),
+                                        ).show(context);
+                                      });
+
+                                      // Navigator.of(context)
+                                      //   .pop();
+                                      //   MotionToast.success(
+                                      //     description: Text('Login Successfull') ,
+                                      //     toastDuration: const Duration(seconds: 1),
+                                      //   ).show(context);
+                                      
+                                  } else {
+                                    MotionToast.error(description: Text('Login UnSuccessfull'))
+                                        .show(context);
+                                  }
                                 }
                                 else{
                                   print("validation error");
