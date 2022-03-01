@@ -1,9 +1,11 @@
+import 'package:clothing_roll/constants/constants.dart';
 import 'package:clothing_roll/http/httpUser.dart';
-import 'package:clothing_roll/shred_preferences/shred_preferences_services.dart';
 import 'package:clothing_roll/ui/screens/auth/register.dart';
+import 'package:clothing_roll/ui/widget/main_tab.dart';
 import 'package:flutter/material.dart';
 import 'package:motion_toast/motion_toast.dart';
 import 'package:logger/logger.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class loginPage extends StatefulWidget {
   const loginPage({ Key? key }) : super(key: key);
@@ -13,8 +15,6 @@ class loginPage extends StatefulWidget {
 }
 
 class _loginPage extends State<loginPage> {
-
-  final PrefServices _prefServices = PrefServices();
 
   TextEditingController _usernameControler = TextEditingController();
   TextEditingController _passwordControler = TextEditingController();
@@ -34,26 +34,6 @@ class _loginPage extends State<loginPage> {
   Widget build(BuildContext context) {
     return 
     Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        automaticallyImplyLeading: true,
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back),
-          color: Colors.black,
-          onPressed: () {
-            Navigator.of(context)
-            .pop();
-          },
-          ),
-        title: Text(
-              'Login',
-              style: TextStyle(
-                fontSize: 26, 
-                fontFamily: 'Klavika', 
-                color: Colors.blue[700])
-              ),
-
-        ),
         body: ListView(
           children: [
             Center(
@@ -146,22 +126,18 @@ class _loginPage extends State<loginPage> {
                                   
                                   var res = await loginPost(_usernameControler.text, _passwordControler.text);
                                    if (res) {
-                                      _prefServices.createCache(_usernameControler.text, _passwordControler.text).whenComplete(() {
+                                     final SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+                                     sharedPreferences.setString("token", tokenConstant);
                                         Navigator.of(context)
-                                        .pop();
+                                        .push(MaterialPageRoute(
+                                          builder: (context)=>MainTab()
+                                          
+                                        ));
                                         MotionToast.success(
                                           description: Text('Login Successfull') ,
                                           toastDuration: const Duration(seconds: 1),
                                         ).show(context);
-                                      });
-
-                                      // Navigator.of(context)
-                                      //   .pop();
-                                      //   MotionToast.success(
-                                      //     description: Text('Login Successfull') ,
-                                      //     toastDuration: const Duration(seconds: 1),
-                                      //   ).show(context);
-                                      
+                                 
                                   } else {
                                     MotionToast.error(description: Text('Login UnSuccessfull'))
                                         .show(context);

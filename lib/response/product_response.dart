@@ -22,3 +22,24 @@ class ResponseProduct {
 
 
 
+// @JsonSerializable(explicitToJson: true)
+class ResponseProductDetail<T> {
+  bool? success;
+  T? data;
+
+  ResponseProductDetail({
+    this.success=false, 
+    this.data
+    });
+
+  // factory ResponseProductDetail.fromJson(Map<String, dynamic>json){
+  //    return ResponseProductDetail(
+  //     success: json['success'],
+  //     data: json['data'],
+  //   );
+  // }
+}
+
+
+
+

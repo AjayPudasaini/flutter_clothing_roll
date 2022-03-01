@@ -8,13 +8,14 @@ class PrefServices{
     _preferences.setString("password", password);
   }
 
-  Future readCache(String username, String password) async {
+  Future readCache(String username) async {
     SharedPreferences _preferences = await SharedPreferences.getInstance();
-    _preferences.getString("username");
-    _preferences.getString("password");
+    var username = _preferences.getString("username")?? "khali";
+    // _preferences.getString("password");
+    return username;
   }
 
-  Future removeCache(String username, String password) async {
+  Future<void> removeCache(String username, String password) async {
     SharedPreferences _preferences = await SharedPreferences.getInstance();
     _preferences.remove("username");
     _preferences.remove("password");

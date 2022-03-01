@@ -35,12 +35,15 @@ class _MainTab extends State<MainTab> {
         appBar: AppBar(
           backgroundColor: Colors.white,
           title: Text(
-              'clothing roll',
+              'Shopping Mall',
               style: TextStyle(
                 fontSize: 26, 
                 fontFamily: 'Klavika', 
                 color: Colors.blue[700])
               ),
+          
+          automaticallyImplyLeading: false,
+
     
     
           actions: [
@@ -80,14 +83,7 @@ class _MainTab extends State<MainTab> {
 
 
             BottomNavyBarItem(
-              icon: Badge(
-                position: BadgePosition.topEnd(top: -13, end: -5),
-                badgeContent: Text(
-                  "3",
-                  style: TextStyle(fontSize: 10, color: Colors.white),
-                  ),
-                child: Icon(Icons.shopping_cart),
-                ),
+              icon: Icon(Icons.shopping_cart),
               title: Text("My Cart"),
               activeColor: Colors.blue.shade900,
               inactiveColor: Colors.black45,

@@ -15,3 +15,9 @@ const String USER_ACCOUNT_DELETE_URL = BASE_URL + "account/user/delete";
 const String GET_ALL_PRODUCTS = BASE_URL+"products/list";
 const String GET_SINGLE_PRODUCTS = BASE_URL+"product/";
 
+
+// ---------- Add To Cart API
+const String ADD_TO_CART = BASE_URL+"product/add-to-cart/";
+const String My_CART = BASE_URL+"my-cart-item";
+const String DELETE_MY_CART = BASE_URL+"delete/my-cart/";
+

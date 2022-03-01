@@ -1,7 +1,10 @@
 import 'package:clothing_roll/http/httpProduct.dart';
 import 'package:clothing_roll/model/productModel.dart';
+import 'package:clothing_roll/sqfliteDatabase/db_provider.dart';
+import 'package:clothing_roll/ui/screens/productDetail_page.dart';
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:logger/logger.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({ Key? key }) : super(key: key);
@@ -20,12 +23,18 @@ class _HomeScreen extends State<HomeScreen> {
 
 
   late Future<List<Product>> futureProducts;
+  late Future<List<Product>> dbProvider;
   String photourl = 'http://10.0.2.2:8000/';
+  var log = Logger();
+  // var dbProvider = DBProvider.db.getAllProduct();
 
   @override
   void initState() {
     super.initState();
     futureProducts = HttpProduct().getProducts();
+    log.i(futureProducts);
+    dbProvider = DBProvider.db.getAllProduct();
+    log.i(dbProvider);
   }
 
 
@@ -53,6 +62,7 @@ class _HomeScreen extends State<HomeScreen> {
                         padding: const EdgeInsets.only(top: 5),
                         child: Text(
                           "${obj.productName}",
+                          maxLines: 1,
                           style: TextStyle(fontSize: 15, fontFamily: 'openSans', color: Colors.black87),
                           ),
                       ),
@@ -67,7 +77,12 @@ class _HomeScreen extends State<HomeScreen> {
                   ),
                               
                   ),
-                onTap: () => print("product item clicked"),
+                onTap: () => {
+                  Navigator.of(context)
+                    .push(MaterialPageRoute(
+                    builder: (context)=>productDetailPage(id:obj.id)
+                  ))
+                },
               )
             );
 
@@ -75,9 +90,12 @@ class _HomeScreen extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
+    return
+    
+    Padding(
       padding: const EdgeInsets.all(12.0),
       child: Container(
+
               child: FutureBuilder<List<Product>>(
                 future: futureProducts,
                 builder: (context, snapshot) {
@@ -97,8 +115,17 @@ class _HomeScreen extends State<HomeScreen> {
                 },
                 )
             ),
+
+            
     );
-    
+
+   
+  
+  }
+}
+
+
+
       // Column(
       //   children: [
       //     // Container(
@@ -139,8 +166,3 @@ class _HomeScreen extends State<HomeScreen> {
       // ),
     
     
-
-   
-  
-  }
-}

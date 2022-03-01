@@ -29,6 +29,7 @@ class _registerPage extends State<registerPage> {
       var res = HttpConnectUser().registerUser(u);
       return res;
     }
+    
 
   @override
   Widget build(BuildContext context) {

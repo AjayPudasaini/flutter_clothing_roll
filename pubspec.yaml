@@ -26,6 +26,7 @@ environment:
 # dependencies can be manually updated by changing the version numbers below to
 # the latest version available on pub.dev. To see which dependencies have newer
 # versions available, run `flutter pub outdated`.
+
 dependencies:
   flutter:
     sdk: flutter
@@ -48,6 +49,17 @@ dependencies:
   logger: ^1.1.0
   shared_preferences: ^2.0.13
   json_annotation: ^4.4.0
+  awesome_notifications: ^0.6.21
+  proximity_sensor: ^1.0.2
+  restart_app: ^1.1.0
+  sqflite: ^2.0.2
+  path_provider: ^2.0.9
+  mockito: ^5.1.0
+  test: ^1.17.12
+  
+
+
+
 
 
 
@@ -85,6 +97,7 @@ flutter:
     - images/slider/s1.jpg
     - images/slider/s2.jpg
     - images/slider/s3.jpg
+    - images/logo/profile.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
