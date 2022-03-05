@@ -97,9 +97,7 @@ class _registerPage extends State<registerPage> {
                           Padding(
                             padding: const EdgeInsets.all(8.0),
                             child: TextFormField(
-                              // onSaved: (val) => {
-                              //   username:val
-                              // },
+                              key: const Key("run"),
                               controller: _usernameControler,
                               decoration: const InputDecoration(
                                 border: OutlineInputBorder(),
@@ -118,9 +116,7 @@ class _registerPage extends State<registerPage> {
                           Padding(
                             padding: const EdgeInsets.all(8.0),
                             child: TextFormField(
-                              // onSaved: (val)=>{
-                              //   email:val
-                              // },
+                              key: const Key("re"),
                               controller: _emailControler,
                               decoration: const InputDecoration(
                                 border: OutlineInputBorder(),
@@ -137,9 +133,7 @@ class _registerPage extends State<registerPage> {
                           Padding(
                             padding: const EdgeInsets.all(8.0),
                             child: TextFormField(
-                              // onSaved: (val)=>{
-                              //   password:val
-                              // },
+                              key: const Key("rpw"),
                               controller: _passwordControler,
                               obscureText: true,
                               decoration: const InputDecoration(
@@ -159,6 +153,7 @@ class _registerPage extends State<registerPage> {
                             width: 400,
                             padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
                             child: ElevatedButton(
+                              key: const Key("rrb"),
                               child: const Text('Register', style: TextStyle(fontSize: 20),),
                               onPressed: () async {
                                 FocusManager.instance.primaryFocus?.unfocus();

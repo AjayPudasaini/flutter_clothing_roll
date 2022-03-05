@@ -2,12 +2,13 @@ import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:clothing_roll/http/httpAddToCart.dart';
 import 'package:clothing_roll/http/httpProduct.dart';
 import 'package:clothing_roll/model/addToCartModel.dart';
-import 'package:clothing_roll/ui/screens/cart_screen.dart';
 import 'package:clothing_roll/ui/widget/main_tab.dart';
 import 'package:flutter/material.dart';
 import 'package:form_field_validator/form_field_validator.dart';
 import 'package:logger/logger.dart';
 import 'package:motion_toast/motion_toast.dart';
+import 'package:sensors_plus/sensors_plus.dart';
+import 'dart:async';
 
 
 
@@ -36,6 +37,18 @@ class _productDetailPage extends State<productDetailPage> {
   var productThumbnail = "";
 
   String photourl = 'http://10.0.2.2:8000/';
+  
+  final _streamSubscriptions = <StreamSubscription<dynamic>>[];
+
+
+  @override
+  void dispose() {
+    super.dispose();
+    for (final subscription in _streamSubscriptions) {
+      subscription.cancel();
+    }
+  }
+
 
   Future<bool> addToCartForm(AddToCart cart) {
       var res = HttpAddToCart().addToCart(cart, widget.id);
@@ -57,6 +70,25 @@ class _productDetailPage extends State<productDetailPage> {
       });
      
     });
+
+
+     _streamSubscriptions.add(
+      gyroscopeEvents.listen(
+        (GyroscopeEvent event) async {
+          if (event.x < -3) {
+            AddToCart addToCart = AddToCart(
+              productQuantity: "10"
+            );
+
+            bool isCreated = await addToCartForm(addToCart); 
+              if (isCreated) {
+                notify();                       
+            }
+            // MotionToast.error(description: Text("test")).show(context);
+          }
+        },
+      ),
+    );
   }
 
   void notify() async {
@@ -70,13 +102,13 @@ class _productDetailPage extends State<productDetailPage> {
           bigPicture:(photourl+productThumbnail),
       )
     );
-    AwesomeNotifications().actionStream.listen((event) { 
-          Navigator.of(context)
-            .push(MaterialPageRoute(
-            builder: (context)=>CartScreen()
-          )
-        );
-    });
+    // AwesomeNotifications().actionStream.listen((event) { 
+    //       Navigator.of(context)
+    //         .push(MaterialPageRoute(
+    //         builder: (context)=>CartScreen()
+    //       )
+    //     );
+    // });
     
 }
   

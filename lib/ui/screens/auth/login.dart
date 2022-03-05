@@ -76,6 +76,7 @@ class _loginPage extends State<loginPage> {
                           Padding(
                             padding: const EdgeInsets.all(8.0),
                             child: TextFormField(
+                              key: const Key("lun"),
                               controller: _usernameControler,
                               decoration: const InputDecoration(
                                 border: OutlineInputBorder(),
@@ -95,6 +96,7 @@ class _loginPage extends State<loginPage> {
                           Padding(
                             padding: const EdgeInsets.all(8.0),
                             child: TextFormField(
+                              key: const Key("lpass"),
                               controller: _passwordControler,
                               obscureText: true,
                               decoration: const InputDecoration(
@@ -118,6 +120,7 @@ class _loginPage extends State<loginPage> {
                             width: 400,
                             padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
                             child: ElevatedButton(
+                              key: const Key("llb"),
                               child: const Text('Login', style: TextStyle(fontSize: 20),),
                               onPressed: () async {
                                 FocusManager.instance.primaryFocus?.unfocus();

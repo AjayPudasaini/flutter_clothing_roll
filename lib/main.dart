@@ -39,6 +39,7 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
+  
   var log = Logger();
   bool _isNear = false;
   late StreamSubscription<dynamic> _streamSubscription;
