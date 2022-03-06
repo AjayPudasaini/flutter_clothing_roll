@@ -115,7 +115,8 @@ class _productDetailPage extends State<productDetailPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return 
+    Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
         automaticallyImplyLeading: true,
@@ -260,6 +261,7 @@ class _productDetailPage extends State<productDetailPage> {
     
     
     );
+  
   
   }
 }
